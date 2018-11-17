@@ -10,14 +10,14 @@ public class KLargestElements {
 
     public static Random random = new Random();
     public static void main(String[] args) {
-        int n = 1000000;
+        int n = 32000000;
 
         int[] arr = new int[n];
         for(int i=0; i<n; i++) {
             arr[i] = i;
         }
         Shuffle.shuffle(arr);
-        int choice=1;
+        int choice=2;
         Timer timer = new Timer();
         switch(choice) {
             case 1:
@@ -33,37 +33,32 @@ public class KLargestElements {
     }
 
     private static void select(int[] arr, int k) {
-        select(arr,0,arr.length-1,k);
+        select(arr,0,arr.length,k);
     }
 
-    private static int select(int[] arr, int start, int end, int k) {
-        if(end < 10){
-            insertionSort(arr);
-            return k;
-        }else{
-            int q= randomizedPartition(arr, start, end);
-         //what is this?
+    private static int select(int[] arr, int start, int end, int k)
+    {
+            int q= randomizedPartition(arr, start, start+end-1);
             int left= q-start;
-            int right= end-left-1; //corrected
+            int right= end-left-1;
             if(right>= k)
             {
-                return select(arr,q+1,end,k);  //why?
+                return select(arr,q+1,right,k);
             }
             else if(right+1 == k)
             {
                 return q;
             }
             else{
-                return select(arr,start,q,k-right-1);
+                return select(arr,start,left,k-right-1);
             }
-        }
+
 
     }
 
     private static int randomizedPartition(int[] arr, int p, int r) {
         Random ran = new Random();
-        System.out.println(r + " "+ p);
-            int i = ran.nextInt((r-p)+1)+p;
+            int i = p + ran.nextInt((r-p)+1);
             int temp;
             temp = arr[i];
             arr[i] = arr[r];
