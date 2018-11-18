@@ -10,14 +10,14 @@ public class KLargestElements {
 
     public static Random random = new Random();
     public static void main(String[] args) {
-        int n = 32000000;
+        int n = 16000000;
 
         int[] arr = new int[n];
         for(int i=0; i<n; i++) {
             arr[i] = i;
         }
         Shuffle.shuffle(arr);
-        int choice=2;
+        int choice=1;
         Timer timer = new Timer();
         switch(choice) {
             case 1:
@@ -38,6 +38,14 @@ public class KLargestElements {
 
     private static int select(int[] arr, int start, int end, int k)
     {
+        if(end <= 99){
+            insertionSort(arr, start, start + end - 1);
+         //   System.out.println(arr[start + end - k]);
+            return start + end - k;
+
+        }else{
+
+
             int q= randomizedPartition(arr, start, start+end-1);
             int left= q-start;
             int right= end-left-1;
@@ -47,12 +55,13 @@ public class KLargestElements {
             }
             else if(right+1 == k)
             {
+              //  System.out.println(arr[q]);
                 return q;
             }
             else{
                 return select(arr,start,left,k-right-1);
             }
-
+        }
 
     }
 
@@ -87,9 +96,6 @@ public class KLargestElements {
         return i+1;
     }
 
-    public static void insertionSort(int[] arr) {
-        insertionSort(arr, 0, arr.length-1);
-    }
 
     private static void insertionSort(int[] arr, int start, int end) {
         for(int i=start+1; i <= end; i++)
@@ -107,11 +113,16 @@ public class KLargestElements {
         PriorityQueue<Integer> pq= new PriorityQueue<>(k);
 
         for(int i:arr){
-            pq.offer(i);
-            if(pq.size()>k){
-                pq.poll();
+            if(pq.size()<k){
+                pq.offer(i);
+            } else {
+                if (i > pq.peek()) {
+                    pq.offer(i);
+                    pq.poll();
+                }
             }
         }
+       // System.out.println(pq.peek());
     }
 
     /** Timer class for roughly calculating running time of programs
